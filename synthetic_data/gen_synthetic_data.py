@@ -43,7 +43,7 @@ def gen_exponential_data(tau: float = 1, n: int = 1000, m: int = 1) -> ndarray:
     u = uniform(0, 1, (n, m))
     return -tau * log(u)
 
-def gen_cox_event_times_data(r, lambda_inv, beta: ndarray, z: ndarray, n:int = 1000, *args):
+def gen_cox_event_times_data(r, lambda_inv, beta: ndarray, z: ndarray, a:int = 0, b:int = 1, n:int = 1000, *args):
     """
     Helper function for generating cox event times
     
@@ -53,11 +53,19 @@ def gen_cox_event_times_data(r, lambda_inv, beta: ndarray, z: ndarray, n:int = 1
         z: covariates
         n: number of samples to generate
         m: number of dimensions of the data
+
+    returns:
+        clinical outcomes: (n, 2) -> (times, risk)
     """
-    u = uniform(0, 1, (n, 1))
+    u = uniform(a, b, (n, 1))
     t_r = lambda_inv(-1 * exp(-1 * dot(z, beta)) * log(u), *args)
-    return np.hstack((t_r, (r * ones((n, 1)).astype(int))))
+    return t_r, r * ones((n, 1)).astype(int)
     
+def gen_cox_times_const_lam(r: int, lam: float, beta, z, n=1000):
+    u = np.random.uniform(size=(n,1))
+    t_u =  - np.divide(log(u), lam * np.exp(np.dot(z, beta))) 
+    return t_u, r * ones((n, 1)).astype(int) 
+        
     
 # if __name__ == "__main__":
 #     # test the gaussian data generator

@@ -28,7 +28,7 @@ def inverse_power_h(x, lambda_0, p=1.):
     """
     return (((p + 1) / lambda_0 ) * x)**(1 / (p + 1))
 
-def inverse_time_scaled_h(x, lambda_0, tau=0.):
+def inverse_time_scaled_h(x, lambda_0, tau=1.):
     """
     Time scaled hazard rate function: \lambda(t) = \lambda_0 * (t + \tau)
     
